@@ -1,0 +1,51 @@
+This circuit uses the force and ambient light sensors to warn about high light intensity or high force.
+This can be used to protect highly sensitive equipments which are common in space applications.
+The warnings are given with the help of an LED and a Buzzer (Piezoelectric).
+
+Code:
+
+const int lightPin = A0;
+const int forcePin = A1;
+const int ledPin = 13;
+const int buzzerPin = 8;
+
+int lightValue = 0;
+int forceValue = 0;
+int lightThreshold = 18;
+int forceThreshold = 800;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  lightValue = analogRead(lightPin);
+  forceValue = analogRead(forcePin);
+
+  Serial.print("Light Value: ");
+  Serial.print(lightValue);
+  Serial.print(" Force Value: ");
+  Serial.println(forceValue);
+
+  if (lightValue < lightThreshold) {
+    Serial.println("High intensity of light detected.");
+    digitalWrite(ledPin, HIGH);
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  if (forceValue > forceThreshold) {
+    Serial.println("Very high force detected.");
+    digitalWrite(ledPin, HIGH);
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  delay(2000);
+}
