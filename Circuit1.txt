@@ -1,0 +1,43 @@
+This circuit gets the temperature and soil moisture and displays it on an LCD 16 x 2  (I2C).
+This will be useful when the rover navigates the surface of Mars.
+Since optimum temperature and water and some important requirements for survival, this can be used to find potential habitable sites.
+
+It comprises of Temperature(TMP36) and Soil Moisture sensors.
+
+Code:
+
+#include <Adafruit_LiquidCrystal.h>
+
+Adafruit_LiquidCrystal lcd(0);
+
+int soilPin = A0;
+int tempPin = A1;
+float temperature;
+
+void setup()
+{
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  int soilValue = analogRead(soilPin);
+  int tempReading = analogRead(tempPin);
+  float voltage = tempReading * (5.0 / 1023.0);
+
+  temperature = 25+(voltage - 0.7478)*100;
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: ");
+  lcd.print(temperature);
+  lcd.print("C");
+
+  lcd.setCursor(0, 1);
+  lcd.print("Soil Moist: ");//It should actually be Soil Moisture but the LCD display can only hold 16 characters in one line.
+  lcd.print(soilValue);
+
+
+  delay(250);
+}
