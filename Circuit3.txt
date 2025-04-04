@@ -1,0 +1,33 @@
+This circuit detects motion using PIR sensor and activates lighting whose intensity depends on the bending of Flex sensor.
+It can be used to save electrical energy (by turning off automatically-PIR sensor) while also enabling control over its consumption (by enabling us to control the energy consumed-Flex sensor).
+In places like Mars, saving electrical energy is important until a permanent power source is established.
+
+Code:
+
+const int flexPin = A0;
+const int pirPin = 2;
+const int ledPin = 9;
+
+int flexValue = 0;
+int pirValue = 0;
+int brightness = 0;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);  
+  pinMode(pirPin, INPUT);  
+  Serial.begin(9600);  
+}
+
+void loop() {
+  flexValue = analogRead(flexPin);  
+  pirValue = digitalRead(pirPin);   
+  
+  if (pirValue == HIGH) {
+    brightness = map(flexValue, 0, 1023, 0, 255);  
+    analogWrite(ledPin, brightness);  
+  } else {
+    digitalWrite(ledPin, LOW);  
+  }
+  
+  delay(100);  
+}
